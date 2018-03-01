@@ -69,6 +69,75 @@ void parse_file ( char * filename,
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     printf(":%s:\n",line);
+
+    // LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE 
+    if( strcmp(line, "line") == 0){
+      fgets( line, 255, f);
+      double x0 = strtol( line, *line, 0);
+      double y0 = strtol( line, *line, 0);
+      double z0 = strtol( line, *line, 0);
+      double x1 = strtol( line, *line, 0);
+      double y1 = strtol( line, *line, 0);
+      double z1 = strtol( line, *line, 0);
+      add_edge( edges, x0, y0, z0, x1, y1, z1);  
+    }
+    
+    // IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT 
+    else if( strcmp(line, "ident") == 0){
+      transform = ident(transform);
+    }
+
+    // SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE 
+    else if( strcmp(line, "scale") == 0){
+      struct matrix scale;
+      fgets( line, 255, f);
+      double x = strtol( line, *line, 0);
+      double y = strtol( line, *line, 0);
+      double z = strtol( line, *line, 0);
+      scale = make_scale(x, y, z);
+      matrix_mult( scale, transform); 
+    }
+
+    // TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE 
+    else if( strcmp(line, "translate") == 0){
+      struct matrix translate;
+      fgets( line, 255, f);
+      double x = strtol( line, *line, 0);
+      double y = strtol( line, *line, 0);
+      double z = strtol( line, *line, 0);
+      translate = make_translate(x, y, z);
+      matrix_mult( translate, transform); 
+    }
+
+    // ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE
+    else if( strcmp(line, "rotate") == 0){
+
+    }
+
+    // APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY
+    else if( strcmp(line, "apply") == 0){
+
+    }
+
+    // DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY
+    else if( strcmp(line, "display") == 0){
+
+    }
+
+    // SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE
+    else if( strcmp(line, "save") == 0){
+
+    }
+
+    // QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT 
+    else if( strcmp(line, "quit") == 0){
+      
+    }
+
+    // COMMAND NOT FOUND COMMAND NOT FOUND COMMAND NOT FOUND COMMAND NOT FOUND 
+    else {
+
+    }
   }
 }
   

@@ -73,70 +73,92 @@ void parse_file ( char * filename,
     // LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE 
     if( strcmp(line, "line") == 0){
       fgets( line, 255, f);
-      double x0 = strtol( line, *line, 0);
-      double y0 = strtol( line, *line, 0);
-      double z0 = strtol( line, *line, 0);
-      double x1 = strtol( line, *line, 0);
-      double y1 = strtol( line, *line, 0);
-      double z1 = strtol( line, *line, 0);
+      char *p;
+      double x0 = strtol( line, &p, 0);
+      double y0 = strtol( p, &p, 0);
+      double z0 = strtol( p, &p, 0);
+      double x1 = strtol( p, &p, 0);
+      double y1 = strtol( p, &p, 0);
+      double z1 = strtol( p, &p, 0);
       add_edge( edges, x0, y0, z0, x1, y1, z1);  
     }
     
     // IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT IDENT 
     else if( strcmp(line, "ident") == 0){
-      transform = ident(transform);
+      ident(transform);
     }
 
     // SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE SCALE 
     else if( strcmp(line, "scale") == 0){
-      struct matrix scale;
-      fgets( line, 255, f);
-      double x = strtol( line, *line, 0);
-      double y = strtol( line, *line, 0);
-      double z = strtol( line, *line, 0);
-      scale = make_scale(x, y, z);
-      matrix_mult( scale, transform); 
+      char *p;
+      fgets( p, 255, f);
+      double x = atof(strsep( &p, " "));
+      double y = atof(strsep( &p, " "));
+      double z = atof(strsep( &p, " "));
+      matrix_mult( make_scale(x, y, z), transform); 
     }
 
     // TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE TRANSLATE 
-    else if( strcmp(line, "translate") == 0){
-      struct matrix translate;
-      fgets( line, 255, f);
-      double x = strtol( line, *line, 0);
-      double y = strtol( line, *line, 0);
-      double z = strtol( line, *line, 0);
-      translate = make_translate(x, y, z);
-      matrix_mult( translate, transform); 
+    else if( strcmp(line, "move") == 0){
+      char *p;
+      fgets( line, 15, f);
+      p = &line;
+      double x = atof(strsep( &p, " "));
+      double y = atof(strsep( &p, " "));
+      double z = atof(strsep( &p, " "));
+      matrix_mult( make_translate(x, y, z), transform); 
     }
 
     // ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE ROTATE
     else if( strcmp(line, "rotate") == 0){
-
+      char *p;
+      fgets( line, 255, f);
+      p = &line;
+      char *axis = strsep( &p, " ");
+      double theta = atof(strsep( &p, " "));
+      if(strcmp(axis, "x") == 0){
+	matrix_mult( make_rotX(theta), transform);
+      }
+      else if(strcmp(axis, "y") == 0){
+	matrix_mult( make_rotY(theta), transform);
+      }
+      else if(strcmp(axis, "z") == 0){
+	matrix_mult( make_rotZ(theta), transform);
+      }
     }
 
     // APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY APPLY
     else if( strcmp(line, "apply") == 0){
-
+      matrix_mult(transform, edges);
     }
 
     // DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY DISPLAY
     else if( strcmp(line, "display") == 0){
-
+      color c;
+      c.red = 0;
+      c.green = MAX_COLOR;
+      c.blue = 0;
+      clear_screen(s);
+      draw_lines( edges, s, c);
+      display(s);
     }
 
     // SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE SAVE
     else if( strcmp(line, "save") == 0){
-
+      fgets(line, 255, f);
+      line[strlen(line)-1]='\0';
+      save_ppm(s, line);
     }
-
+    
     // QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT QUIT 
     else if( strcmp(line, "quit") == 0){
-      
+      printf("\nQUIT\n");
+      break;
     }
 
     // COMMAND NOT FOUND COMMAND NOT FOUND COMMAND NOT FOUND COMMAND NOT FOUND 
     else {
-
+      printf("\nCOMMAND [%s] NOT FOUND\n", line);
     }
   }
 }

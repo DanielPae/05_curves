@@ -11,8 +11,15 @@
 int main(int argc, char **argv) {
 
   screen s;
+  color c;
   struct matrix * edges;
   struct matrix * transform;
+
+  c.red = 0;
+  c.green = MAX_COLOR;
+  c.blue = 0;
+
+  clear_screen(s);
 
   edges = new_matrix(4, 4);
   transform = new_matrix(4, 4);

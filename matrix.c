@@ -16,9 +16,9 @@ struct matrix * make_translate(double x, double y, double z) {
   struct matrix *tran;
   tran = new_matrix(4, 4);
   ident(tran);
-  tran -> m[0][4] = x;
-  tran -> m[1][4] = y;
-  tran -> m[2][4] = z;
+  tran -> m[0][3] = x;
+  tran -> m[1][3] = y;
+  tran -> m[2][3] = z;
   return tran;
 }
 
@@ -49,7 +49,7 @@ struct matrix * make_rotX(double theta) {
   struct matrix *rot;
   rot = new_matrix(4, 4);
   ident(rot);
-  theta = theta * 180 / M_PI;
+  theta = theta * M_PI / 180;
   rot -> m[1][1] = cos(theta);
   rot -> m[1][2] = -1 * sin(theta);
   rot -> m[2][1] = sin(theta);
@@ -67,11 +67,11 @@ struct matrix * make_rotY(double theta) {
   struct matrix *rot;
   rot = new_matrix(4, 4);
   ident(rot);
-  theta = theta * 180 / M_PI;
+  theta = theta * M_PI / 180;
   rot -> m[0][0] = cos(theta);
   rot -> m[0][2] = sin(theta);
   rot -> m[2][0] = -1 * sin(theta);
-  rot -> m[2][2] = cos(theta);;
+  rot -> m[2][2] = cos(theta);
   return rot;
 }
 
@@ -85,7 +85,7 @@ struct matrix * make_rotZ(double theta) {
   struct matrix *rot;
   rot = new_matrix(4, 4);
   ident(rot);
-  theta = theta * 180 / M_PI;
+  theta = theta * M_PI / 180;
   rot -> m[0][0] = cos(theta);
   rot -> m[0][1] = -1 * sin(theta);
   rot -> m[1][0] = sin(theta);

@@ -21,18 +21,18 @@
 void add_circle( struct matrix * points,
 		   double cx, double cy, double cz,
 		   double r, double step ) {
-double t, x0, y0, x1, y1;
-t = 0;
-step = .05;
-x0 = r * cos(2 * M_PI * (t + 0.001)) + cx;
-y0 = r * sin(2 * M_PI * (t + 0.001)) + cy;
-for(; t < 1; t += step){
-x1 = r * cos(2 * M_PI * t) + cx;
-y1 = r * sin(2 * M_PI * t) + cy;
-add_edge( points, x0, y0, cz, x1, y1, cz);
-x0 = x1;
-y0 = y1;
-}
+  double t, x0, y0, x1, y1;
+  t = 0;
+  step = .05;
+  x0 = r * cos(2 * M_PI * (t + 0.001)) + cx;
+  y0 = r * sin(2 * M_PI * (t + 0.001)) + cy;
+  for(; t < 1; t += step){
+    x1 = r * cos(2 * M_PI * t) + cx;
+    y1 = r * sin(2 * M_PI * t) + cy;
+    add_edge( points, x0, y0, cz, x1, y1, cz);
+    x0 = x1;
+    y0 = y1;
+  }
 }
 
 /*======== void add_curve() ==========
@@ -54,20 +54,35 @@ y0 = y1;
   to the matrix points
   ====================*/
 void add_curve( struct matrix *points, 
-		  double x0, double y0, 
-		  double x1, double y1, 
-		  double x2, double y2, 
-		  double x3, double y3, 
-		  double step, int type ) {
-struct matrix * coefs_x, coefs_y;
-coefs_x = generate_curve_coefs(x0, x1, x2, x3, type);
-coefs_y = generate_curve_cofes(y0, y1, y2, y3, type);
-
-
+		double x0, double y0, 
+		double x1, double y1, 
+		double x2, double y2, 
+		double x3, double y3, 
+		double step, int type ) {
+  struct matrix * coefs_x, coefs_y;
+  coefs_x = generate_curve_coefs(x0, x1, x2, x3, type);
+  coefs_y = generate_curve_cofes(y0, y1, y2, y3, type);
+  
+  int t = 0;
+  double ax = coefs_x -> m[0][0];
+  double bx = coefs_x -> m[1][0];
+  double cx = coefs_x -> m[2][0];
+  double dx = coefs_x -> m[3][0];
+  double ay = coefs_y -> m[0][0];
+  double by = coefs_y -> m[1][0];
+  double cy = coefs_y -> m[2][0];
+  double dy = coefs_y -> m[3][0];
+  for(; t < 1; t += step){
+    x1 = ax * (t * t * t) + bx * (t * t) + cx * t + dx;
+    y1 = ay * (t * t * t) + by * (t * t) + cy * t + dy;
+    add_edge(points, x0, y0, 1, x1, y1, 1);
+    x0 = x1;
+    y0 = y1;
+  }
 }
-
-
-/*======== void add_point() ==========
+  
+  
+  /*======== void add_point() ==========
   Inputs:   struct matrix * points
   int x
   int y

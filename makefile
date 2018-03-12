@@ -3,10 +3,7 @@ CFLAGS= -Wall
 LDFLAGS= -lm
 CC= gcc
 
-run: main
-	./main script
-
-main: $(OBJECTS)
+all: $(OBJECTS)
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h

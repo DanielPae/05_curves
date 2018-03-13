@@ -24,17 +24,18 @@ void add_circle( struct matrix * points,
 		 double cx, double cy, double cz,
 		 double r, double step ) {
   double t, x0, y0, x1, y1;
-  t = 0;
+  t = -1 * step;
   x0 = r * cos(2 * M_PI * t) + cx;
   y0 = r * sin(2 * M_PI * t) + cy;
-  printf("%lf %lf\n", x0, y0);
+  //printf("%lf %lf\n", x0, y0);
   for(; t <= 1; t += step){
     x1 = r * cos(2 * M_PI * t) + cx;
     y1 = r * sin(2 * M_PI * t) + cy;
     add_edge( points, x0, y0, cz, x1, y1, cz);
     x0 = x1;
     y0 = y1;
-  }printf("%lf %lf %lf %lf %lf\n", x0, y0, x1, y1, t);
+  }
+  //printf("%lf %lf %lf %lf %lf\n", x0, y0, x1, y1, t);
 }
 
 /*======== void add_curve() ==========
@@ -74,6 +75,9 @@ void add_curve( struct matrix *points,
   double by = coefs_y -> m[1][0];
   double cy = coefs_y -> m[2][0];
   double dy = coefs_y -> m[3][0];
+  printf("ax[%lf] bx[%lf] cx[%lf] dx[%lf] ay[%lf] by[%lf] cy[%lf] dy[%lf]\n", 
+ax, bx, cx, dx, ay, by, cy, dy);
+ 
   for(; t < 1; t += step){
     x1 = ax * (t * t * t) + bx * (t * t) + cx * t + dx;
     y1 = ay * (t * t * t) + by * (t * t) + cy * t + dy;
